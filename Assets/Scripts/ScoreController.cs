@@ -7,6 +7,7 @@ public class ScoreController : MonoBehaviour
 {
     
     public TextMeshProUGUI Text;
+    public TextMeshProUGUI DeathText;
     public GameObject player;
     public int score;
     void Start()
@@ -17,7 +18,11 @@ public class ScoreController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        setscore(Text);
+    }
+    public void setscore(TextMeshProUGUI txt)
+    {
         score = Mathf.RoundToInt(player.transform.position.z);
-        Text.text = score.ToString();
+        txt.text = score.ToString();
     }
 }

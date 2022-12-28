@@ -362,6 +362,7 @@
 -r:"Library/Bee/artifacts/1300b0aE.dag/UnityEngine.UI.ref.dll"
 "Assets/Scripts/CameraControl.cs"
 "Assets/Scripts/Player.cs"
+"Assets/Scripts/RestartButtonController.cs"
 "Assets/Scripts/ScoreController.cs"
 "Assets/Scripts/SwipeDetection.cs"
 "Assets/Scripts/TileSpawner.cs"

@@ -17,6 +17,12 @@ public class Player : MonoBehaviour
         [Tooltip("Current Tilespawner")]
         TileSpawner Tilespawner;
 
+        [Tooltip("Current ScoreController")]
+        ScoreController ScoreController;
+
+        [Tooltip("Death Canvas")]
+        public GameObject DeathCanvas;
+
 
         [Tooltip("How fast player will go")]
         public float speed;
@@ -27,11 +33,15 @@ public class Player : MonoBehaviour
         [Tooltip("How much force is applied to player *multiplied by 200")]
         public float JumpForce = 20;  
 
+        [Tooltip("Is the player alive")]
+        public bool IsAlive = true;  
+
         [Tooltip("Maxium distance from the floor that the player can jump from")]
         public float maxdistance;
 
         [Tooltip("Ground check box size")]
         public Vector3 boxsize;
+
         
 
 
@@ -48,6 +58,7 @@ public class Player : MonoBehaviour
     {
         GameManager = GameObject.FindGameObjectWithTag("GameController");
         Tilespawner = GameManager.GetComponent<TileSpawner>();
+        ScoreController = GameManager.GetComponent<ScoreController>();
         RB = GetComponent<Rigidbody>();
     }
 
@@ -57,24 +68,26 @@ public class Player : MonoBehaviour
       /*var dir = new Vector3(Input.GetAxis("Horizontal"),0 , Input.GetAxis("Vertical"));
 
         transform.Translate(dir * speed * Time.deltaTime);*/
+        if(IsAlive)
+        {
+            //Push Forward
+            transform.Translate(transform.forward * speed * Time.deltaTime);
 
-        //Push Forward
-        transform.Translate(transform.forward * speed * Time.deltaTime);
-
-        //Go left and right
-        if(Input.GetKeyDown(KeyCode.D) && (WhereIs == 0 || WhereIs == -1))
-        {
-           MoveRight();
-        }
-        if(Input.GetKeyDown(KeyCode.A) && (WhereIs == 0 || WhereIs == 1))
-        {
-            MoveLeft();
-        }
-        
-        //Jump
-        if(Input.GetKeyDown(KeyCode.Space) && GroundCheck())
-        {
-           Jump();
+            //Go left and right
+            if(Input.GetKeyDown(KeyCode.D) && (WhereIs == 0 || WhereIs == -1))
+            {
+            MoveRight();
+            }
+            if(Input.GetKeyDown(KeyCode.A) && (WhereIs == 0 || WhereIs == 1))
+            {
+                MoveLeft();
+            }
+            
+            //Jump
+            if(Input.GetKeyDown(KeyCode.Space) && GroundCheck())
+            {
+            Jump();
+            }
         }
     }
 
@@ -109,10 +122,21 @@ public class Player : MonoBehaviour
             return false;
         }
     }
+    public void Death()
+    {   
+        IsAlive = false;
+        DeathCanvas.SetActive(true);
+        ScoreController.setscore(ScoreController.DeathText);
+    }
     void OnTriggerEnter(Collider Col)
     {
-        Destroy(Col.gameObject);
-        Tilespawner.Spawn();
+        if(Col.tag == "Obstacle")
+        {
+            Death();
+            return;
+        }
+            Destroy(Col.gameObject);
+            Tilespawner.Spawn();
     }
 
 }
