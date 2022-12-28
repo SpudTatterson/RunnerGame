@@ -22,7 +22,9 @@ public class Player : MonoBehaviour
 
         [Tooltip("Death Canvas")]
         public GameObject DeathCanvas;
-
+        
+        [Tooltip("Pause menu Canvas")]
+        public GameObject PauseCanvas;
 
         [Tooltip("How fast player will go")]
         public float speed;
@@ -48,7 +50,7 @@ public class Player : MonoBehaviour
 
         [Tooltip("Where the player is (-1 = left, 0 = center, 1 = right)")]
         public int WhereIs = 0;
-
+        public bool IsPaused = false;
 
         
         
@@ -70,6 +72,18 @@ public class Player : MonoBehaviour
         transform.Translate(dir * speed * Time.deltaTime);*/
         if(IsAlive)
         {
+            if(Input.GetKeyDown(KeyCode.Escape) && IsPaused == false)
+            {
+                IsPaused = true;
+                Time.timeScale = 0;
+                PauseCanvas.SetActive(true);
+            }
+            else if(Input.GetKeyDown(KeyCode.Escape) && IsPaused == true)
+            {
+                IsPaused = false;
+                Time.timeScale = 1;
+                PauseCanvas.SetActive(false);
+            }
             //Push Forward
             transform.Translate(transform.forward * speed * Time.deltaTime);
 
