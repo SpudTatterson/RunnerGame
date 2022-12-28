@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class Player : MonoBehaviour
 {
     //[Tooltip("")] template
@@ -9,9 +8,14 @@ public class Player : MonoBehaviour
         [Tooltip("RigidBody")]
         public Rigidbody RB;
 
-        [Tooltip("")]
+        [Tooltip("What object layer should the player be able to jump on ")]
         public LayerMask layermask;
 
+        [Tooltip("Current GameManager")]
+        GameObject GameManager;
+
+        [Tooltip("Current Tilespawner")]
+        TileSpawner Tilespawner;
 
 
         [Tooltip("How fast player will go")]
@@ -23,10 +27,10 @@ public class Player : MonoBehaviour
         [Tooltip("How much force is applied to player *multiplied by 200")]
         public float JumpForce = 20;  
 
-        [Tooltip("")]
+        [Tooltip("Maxium distance from the floor that the player can jump from")]
         public float maxdistance;
 
-        [Tooltip("")]
+        [Tooltip("Ground check box size")]
         public Vector3 boxsize;
         
 
@@ -42,6 +46,8 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameManager = GameObject.FindGameObjectWithTag("GameController");
+        Tilespawner = GameManager.GetComponent<TileSpawner>();
         RB = GetComponent<Rigidbody>();
     }
 
@@ -103,4 +109,10 @@ public class Player : MonoBehaviour
             return false;
         }
     }
+    void OnTriggerEnter(Collider Col)
+    {
+        Destroy(Col.gameObject);
+        Tilespawner.Spawn();
+    }
+
 }
